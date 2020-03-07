@@ -1,0 +1,56 @@
+*
+{
+    padding: 0%;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+.articleSlidesContainer
+{
+    position: relative;
+    text-align: center;
+    width: 45%;
+    height: 35%;
+    margin-right: 5%;
+    float:right;
+}
+
+.articleImage
+{
+    vertical-align: middle;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+
+.imageNumberText
+{
+    color:white;
+    font-size: 18px;
+    padding:  6px;
+    position: absolute;
+   
+}
+
+.selectImageButton
+{
+    position: absolute;
+    bottom:5%;
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+    background-color: rgba(75, 74, 74, 0.4);
+    
+}
+
+
+.nextImage
+{
+    left: 52.5%;
+}
+
+
+.prevImage
+{
+    right:  52.5%;
+}
