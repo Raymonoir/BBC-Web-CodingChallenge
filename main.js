@@ -1,7 +1,7 @@
 
 
 
-
+//Function to get a single article in .JSON format
 function getArticleJSON (articleNum)
 {
     let httpRequest = new XMLHttpRequest();
