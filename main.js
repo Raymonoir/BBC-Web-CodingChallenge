@@ -25,7 +25,6 @@ function organiseArticleContents (articleJSON)
             document.getElementById("articleImageID").src = currentArticleImageArray[0];
             document.getElementById("articleImageNumberID").innerHTML = 1 + " / " + currentArticleImageArray.length;
 
-
             if (currentArticleImageArray.length == 0)
             {
                 document.getElementById("articleSlides").remove();

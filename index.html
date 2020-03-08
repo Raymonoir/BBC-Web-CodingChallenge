@@ -16,26 +16,32 @@
     </head>
 
     <body>
-        <div name="Top Header"> <h1>Ray's News Reader</h1></div>
-        <div name = "Article Title"></div>
 
 
-
-        <div name = "Slideshow container"; class = "articleSlidesContainer"; id="articleSlides">
-
-            <div name = "Image container">
-                <div name = "Current image number"; class='imageNumberText'; id= "articleImageNumberID"></div>
-                <img name = "Current image"; class="articleImage"; id="articleImageID">
-                <a name = "Prev image"; class ="selectImageButton prevImage"; onclick="changeArticleImage(-1)"> < </a>
-                <a name = "Next image"; class ="selectImageButton nextImage"; onclick="changeArticleImage(1)"> > </a>
-            </div>
-
-           
-            
+        <div name="Top Header"; class="pageHeader"> 
+            <h1>Ray's News Reader</h1>
         </div>
 
 
-        <div name = "Article Paragraphs"> <p id="articleParagraphs"></p> </div>
+        <div name="Article Container"; class = "articleContainer" style="background-color: blue;">
+            <div name = "Article Title"> </div>
+            <div name = "Slideshow container"; class = "articleSlidesContainer"; id="articleSlides">
+
+                <div name = "Image container">
+                    <div name = "Current image number"; class='imageNumberText'; id= "articleImageNumberID"></div>
+                    <img name = "Current image"; class="articleImage"; id="articleImageID">
+                    <a name = "Prev image"; class ="selectImageButton prevImage"; onclick="changeArticleImage(-1)"> < </a>
+                    <a name = "Next image"; class ="selectImageButton nextImage"; onclick="changeArticleImage(1)"> > </a>
+                </div>
+
+            </div>
+
+
+            <div name = "Article Paragraphs"; class="articleTextContainer"> 
+                <p id="articleParagraphs">sldkmsakldsdsdasdlksadskdmasmlksdmklsmdsmdmsdlasmdsdmaskldmklsamdsmdsmdsamdmdmsadmasldmasldmkdlsamdll</p>
+            </div>
+
+        </div>
 
     </body>
 </html>
