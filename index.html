@@ -10,7 +10,8 @@
 
         <script>
 
-            getArticleJSON(2);
+            preLoadSurroundingArticlesJSON(1);
+            changeArticleJSON (1);
 
         </script>
     </head>
@@ -23,8 +24,10 @@
         </div>
 
 
-        <div name="Article Container"; class = "articleContainer" style="background-color: blue;">
-            <div name = "Article Title"> </div>
+        <input type="button"; onclick="getArticleJSON(3);"; value="clearArticle">
+
+        <div name="Article Container"; class = "articleContainer">
+            
             <div name = "Slideshow container"; class = "articleSlidesContainer"; id="articleSlides">
 
                 <div name = "Image container">
@@ -37,7 +40,10 @@
             </div>
 
 
-            <div name = "Article Paragraphs"; class="articleTextContainer"> 
+            <div name = "Article Text"; class="articleTextContainer"; id="articleText"> 
+
+                <div name = "Article Title"; style="text-align: center;"> <h2>Article Title</h2></div>
+
                 <p id="articleParagraphs"></p>
             </div>
 
