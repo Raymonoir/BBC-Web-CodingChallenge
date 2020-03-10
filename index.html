@@ -1,19 +1,27 @@
 <!DOCTYPE html>
 <html>
     <head>
-
-      
-
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="main.js"></script>
         <link rel="stylesheet" href="style.css">
 
         <script>
 
-            preLoadSurroundingArticlesJSON(1);
-            changeArticleJSON (1);
+           
+            getArticleJSON(1).then(function()
+                {
+                    setArticleHTML();
+                }, 
+                function(error)
+                {
+                    console.log(error);
+                });
+         
 
         </script>
+
+
+   
     </head>
 
     <body>
@@ -24,11 +32,14 @@
         </div>
 
 
-        <input type="button"; onclick="getArticleJSON(3);"; value="clearArticle">
 
-        <div name="Article Container"; class = "articleContainer">
+
+        <a name = "Prev image"; class ="selectImageButton prevImage"; onclick="getPrevArticle()";> Previous Article </a>
+        <a name = "Next image"; class ="selectImageButton nextImage"; onclick="getNextArticle()";> Next Article </a>
+
+        <div name="Article Container"; class = "articleContainer"; >
             
-            <div name = "Slideshow container"; class = "articleSlidesContainer"; id="articleSlides">
+            <div name = "Slideshow container"; class = "articleSlidesContainer"; id="articleSlides"; style="margin-left: 10px;">
 
                 <div name = "Image container">
                     <div name = "Current image number"; class='imageNumberText'; id= "articleImageNumberID"></div>
@@ -42,12 +53,17 @@
 
             <div name = "Article Text"; class="articleTextContainer"; id="articleText"> 
 
-                <div name = "Article Title"; style="text-align: center;"> <h2>Article Title</h2></div>
+                <div name = "Article Title"; style="text-align: center;"></div>
 
                 <p id="articleParagraphs"></p>
             </div>
 
         </div>
+
+        <script>
+            
+
+        </script>
 
     </body>
 </html>
