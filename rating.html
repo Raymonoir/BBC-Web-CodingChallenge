@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="main.js"></script>
+        <link rel="stylesheet" href="style.css">
+
+    </head>
+    <body>
+
+        <div name="Top Header"; class="pageHeader"> 
+            <h1>Ray's News Reader</h1>
+        </div>
+
+        <div style="margin-left: 40%;">
+            <label for="ratingsForm">Please enter ratings for previous articles</label>
+            
+            <form name="ratingsForm";>
+               
+                <label for="article1">Article 1</label>
+                <input type="number" id="article1" name="article1" min="0" max="5"; value = "0">
+                <br>
+                <label for="article2">Article 2</label>
+                <input type="number" id="article2" name="article2" min="0" max="5"; value = "0">
+                <br>
+                <label for="article3">Article 3</label>
+                <input type="number" id="article3" name="article3" min="0" max="5"; value = "0">
+                <br>
+                <label for="article4">Article 4</label>
+                <input type="number" id="article4" name="article4" min="0" max="5"; value = "0">
+                <br>
+                <label for="article5">Article 5</label>
+                <input type="number" id="article5" name="article5" min="0" max="5"; value = "0">
+                <br>
+
+
+                <input type="button";  value="Submit"; onclick="getArticleRatings()">
+            </form>
+
+        </div>
+
+        <a class ="selectImageButton prevImage"; href="index.html";> Back To Articles </a>
+
+
+
+
+
+
+
+
+
+
+    </body>
+</html>

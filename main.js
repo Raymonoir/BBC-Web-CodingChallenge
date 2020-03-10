@@ -10,12 +10,17 @@ let slideIndex = 0;
 var currentArticlePos = 1;
 
 
+window.addEventListener("offline", function ()
+{
+    console.log("There is no network connection");
+} );
+
 
 //Function to organise article sections and lay them out on the page
 function setArticleHTML()
 {
     //Sets the article title which is first in the array and then pop it from the front
-    document.getElementById("articleParagraphs").innerHTML += "<h2> <u>" + currentArticleSections[0] + "</u></h2><br>";
+    document.getElementById("articleParagraphs").innerHTML += "<h2> <u>" + currentArticleSections[0] +  " -  Article " + currentArticlePos+ "</u></h2><br>";
     currentArticleSections.shift();
 
     //Loop through all items in the article sections array
@@ -34,7 +39,6 @@ function setArticleHTML()
         else if (currentArticleSections[i].type === "list")
         {
             
-
             //Add any lists by looping through all items and then add prepared string to document
             var articleList = "<ul>";
 
@@ -45,7 +49,24 @@ function setArticleHTML()
 
             articleList += "</ul>";
 
-            document.getElementById("articleParagraphs").innerHTML += articleList;
+            document.getElementById("articleParagraphs").innerHTML += articleList + "<br><br>";
+        }
+
+
+        if (currentArticlePos >= 5)
+        {
+            document.getElementById("nextArticleLink").href = "rating.html";
+            document.getElementById("nextArticleLink").innerHTML = "Rate the articles";
+            document.getElementById("nextArticleLink").onclick = "";
+        }
+        else
+        {
+            document.getElementById("nextArticleLink").innerHTML = "Next Article";
+            document.getElementById("nextArticleLink").removeAttribute("href");
+            document.getElementById("nextArticleLink").onclick = () =>
+            {
+                getNextArticle();
+            };
         }
     }
 
@@ -92,9 +113,7 @@ function organiseArticleContents (articleJSON)
 
         
 }
-
-
-        
+   
 
 //This function is given a position change eg. (1, -1), supplied by the movement buttons on the image 
 function changeArticleImage(slidePosChange)
@@ -124,15 +143,10 @@ function getNextArticle ()
             function(error)
             {
                 console.log(error);
-    
             });
 
         currentArticlePos +=1;
-
     }
-
-   
-
 }
 
 //Function to go to previous article
@@ -174,7 +188,7 @@ function clearArticleHTML()
 //Function to get a single article in .JSON format which is returned in a promise
 function getArticleJSON (articleNum)
 {
-    return new Promise(function(resolve, reject)
+    return new Promise(function(succeeded, failed)
     {
 
         let httpRequest = new XMLHttpRequest();
@@ -183,22 +197,25 @@ function getArticleJSON (articleNum)
         //The github url to the raw json files is supplied and concatenated with the given article number.
         httpRequest.open("GET", "https://raw.githubusercontent.com/bbc/news-coding-test-dataset/master/data/article-" + articleNum + ".json");
 
-        //Called when the state of the XMLHttpRequest changes state 
-        let articleJSON;
-
+        //Called when the XMLHttpRequest has finished loading
         httpRequest.onloadend = () =>
         {
             //Operation is done && status == done (200)
             if (httpRequest.status === 200 && httpRequest.readyState === httpRequest.DONE)
             {
-                articleJSON = httpRequest.response;
+                let articleJSON = httpRequest.response;
                 organiseArticleContents(articleJSON);
-                resolve();
+                succeeded();
             }
             else
             {
-                reject(Error(httpRequest.statusText));
+                failed(httpRequest.statusText);
             }
+        }
+
+        httpRequest.onerror = () =>
+        {
+            console.log("An error occurred with the get request")
         }
 
         httpRequest.send();
@@ -207,6 +224,63 @@ function getArticleJSON (articleNum)
 
 }
 
+function getArticleRatings ()
+{
+    let ratingsArray = [];
+    let articleID = "article";
 
+    for (let i = 1; i < 6; i++)
+    {
+        let rating = document.getElementById(articleID + i).value;
+        ratingsArray.push(rating);
+    }
+
+
+    postArticleRatings(ratingsArray).then(function ()
+    {
+        alert("Ratings posted");
+    },
+    function (e)
+    {
+        console.log(e);
+    });
+
+}
+
+
+
+function postArticleRatings (ratingsArray)
+{
+    return new Promise(function(succeeded, failed)
+    {
+        /*
+        let httpRequest = new XMLHttpRequest();
+
+        httpRequest.open("POST", "example.com", true);
+
+        httpRequest.setRequestHeader("Content-type", "application/json");
+        httpRequest.setRequestHeader("Accept", "application/json");
+
+
+        httpRequest.send(data);
+        */
+
+        try 
+        {
+            var data = JSON.stringify({"article1": ratingsArray[0], "article2": ratingsArray[1],"article3": ratingsArray[2],"article4": ratingsArray[3],"article5": ratingsArray[4]});
+            console.log(data);
+            succeeded();
+        }
+        catch (e)
+        {
+            failed(e);
+        }
+
+        
+
+    }); 
+
+
+}
 
 

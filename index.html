@@ -1,8 +1,14 @@
 <!DOCTYPE html>
 <html>
     <head>
+        
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="main.js"></script>
+        <script src="https://code.jquery.com/qunit/qunit-2.9.2.js">
+        
+        
+        </script>
+        <script src="testing.js"></script>
         <link rel="stylesheet" href="style.css">
 
         <script>
@@ -32,10 +38,8 @@
         </div>
 
 
-
-
-        <a name = "Prev image"; class ="selectImageButton prevImage"; onclick="getPrevArticle()";> Previous Article </a>
-        <a name = "Next image"; class ="selectImageButton nextImage"; onclick="getNextArticle()";> Next Article </a>
+        <a class ="selectImageButton prevImage"; onclick="getPrevArticle()";> Previous Article </a>
+        <a class ="selectImageButton nextImage"; onclick="getNextArticle()"; id="nextArticleLink"> Next Article </a>
 
         <div name="Article Container"; class = "articleContainer"; >
             
