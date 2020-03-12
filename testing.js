@@ -1,22 +1,29 @@
-class Testing 
+/*
+
+
+
+function getArticleTest ()
 {
-    constructor()
+    QUnit.test("getArticleTest", function (assert)
     {
 
-    }
 
-    test1 ()
-    {
-        QUnit.test( "hello test", function( assert ) 
-        {
-            assert.ok( 1 == "1", "Passed!" );
-        });
-    }
+    });
+}
+
+
+function setArticleHTMLTest()
+{
+
+}
+
+
+function movingArticleTest)_
+{
+
 }
 
 
 
 
-
-var test = new Testing();
-test.test1();
+*/

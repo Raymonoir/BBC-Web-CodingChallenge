@@ -1,9 +1,4 @@
 
-
-//Used to check if browser has gained access to connection
-//window.addEventListener("offline", functiom (){})
-
-
 let currentArticleImageArray = [];
 var currentArticleSections = [];
 let slideIndex = 0;
@@ -200,6 +195,12 @@ function getArticleJSON (articleNum)
         //Called when the XMLHttpRequest has finished loading
         httpRequest.onloadend = () =>
         {
+
+            if (httpRequest.status === 404)
+            {
+                console.log("Article Not Found");
+            }
+
             //Operation is done && status == done (200)
             if (httpRequest.status === 200 && httpRequest.readyState === httpRequest.DONE)
             {
@@ -282,5 +283,24 @@ function postArticleRatings (ratingsArray)
 
 
 }
+
+
+/*
+
+How I would go about preloading surrounding articles:
+1. When moving from one article to another I would 
+
+
+
+
+
+
+
+
+
+
+
+*/
+
 
 
