@@ -15,7 +15,7 @@ h2
     font-size: 30px;
 }
 
-p{
+p,form,label{
     font-size: 20px;
 }
 

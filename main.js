@@ -1,10 +1,17 @@
 
+/*
+@Author: Raymond Ward
+
+This javascript file adds functionality to my Ray's News Reader html page.
+
+*/
+
 let currentArticleImageArray = [];
-var currentArticleSections = [];
-let slideIndex = 0;
-var currentArticlePos = 1;
+let currentArticleSectionsArray = [];
+let imageSlideIndex = 0;
+let currentArticleIndex = 1;
 
-
+//Event listener for when the window is offline.
 window.addEventListener("offline", function ()
 {
     console.log("There is no network connection");
@@ -15,45 +22,44 @@ window.addEventListener("offline", function ()
 function setArticleHTML()
 {
     //Sets the article title which is first in the array and then pop it from the front
-    document.getElementById("articleParagraphs").innerHTML += "<h2> <u>" + currentArticleSections[0] +  " -  Article " + currentArticlePos+ "</u></h2><br>";
-    currentArticleSections.shift();
+    document.getElementById("articleContent").innerHTML += "<h2> <u>" + currentArticleSectionsArray[0] +  " -  Article " + currentArticleIndex+ "</u></h2><br>";
+    currentArticleSectionsArray.shift();
 
     //Loop through all items in the article sections array
-    for (let i = 0; i < currentArticleSections.length; i++)
+    for (let i = 0; i < currentArticleSectionsArray.length; i++)
     {
         //Sort each article section by its type and add it to the required section
-
-        if (currentArticleSections[i].type === "heading")
+        if (currentArticleSectionsArray[i].type === "heading")
         {
-            document.getElementById("articleParagraphs").innerHTML += "<h3>" + currentArticleSections[i].model.text + "</h3><br>";
+            document.getElementById("articleContent").innerHTML += "<h3>" + currentArticleSectionsArray[i].model.text + "</h3><br>";
         }
-        else if (currentArticleSections[i].type === "paragraph")
+        else if (currentArticleSectionsArray[i].type === "paragraph")
         {
-            document.getElementById("articleParagraphs").innerHTML += currentArticleSections[i].model.text + " <br><br>";
+            document.getElementById("articleContent").innerHTML += currentArticleSectionsArray[i].model.text + " <br><br>";
         }
-        else if (currentArticleSections[i].type === "list")
+        else if (currentArticleSectionsArray[i].type === "list")
         {
-            
             //Add any lists by looping through all items and then add prepared string to document
-            var articleList = "<ul>";
+            let articleList = "<ul>";
 
-            for (j = 0; j < currentArticleSections[i].model.items.length; j++ )
+            for (j = 0; j < currentArticleSectionsArray[i].model.items.length; j++ )
             {
-                articleList += "<li>" + currentArticleSections[i].model.items[j] +  "</li>";
+                articleList += "<li>" + currentArticleSectionsArray[i].model.items[j] +  "</li>";
             }
 
             articleList += "</ul>";
 
-            document.getElementById("articleParagraphs").innerHTML += articleList + "<br><br>";
+            document.getElementById("articleContent").innerHTML += articleList + "<br><br>";
         }
 
-
-        if (currentArticlePos >= 5)
+        //If the current article is the last article, show the button which leads to rating articles
+        if (currentArticleIndex >= 5)
         {
             document.getElementById("nextArticleLink").href = "rating.html";
             document.getElementById("nextArticleLink").innerHTML = "Rate the articles";
             document.getElementById("nextArticleLink").onclick = "";
         }
+        //If not last article, show next article button
         else
         {
             document.getElementById("nextArticleLink").innerHTML = "Next Article";
@@ -67,26 +73,24 @@ function setArticleHTML()
 
 }
 
-
 //Function to sort through contents of article and display them in their alloted sections
 function organiseArticleContents (articleJSON)
 {
-           //Loops through length of article body
-           currentArticleSections.push(articleJSON.title);
+           currentArticleSectionsArray.push(articleJSON.title);
 
+            //Loops through length of article body
             for (let i = 0; i < articleJSON.body.length; i++)
             { 
-                //If its an image, add the url to the list of site images.
+                //If its an image, add json object to the list of site images.
                 if (articleJSON.body[i].type === "image")
                 {
-                    currentArticleImageArray.push(articleJSON.body[i].model.url + "?" + new Date().getTime());
+                    currentArticleImageArray.push(articleJSON.body[i]);
                 }
                 //If the section type is anything but an image, add to article section array
                 else
                 {
-                    currentArticleSections.push(articleJSON.body[i]);
+                    currentArticleSectionsArray.push(articleJSON.body[i]);
                 }
-
             }
 
             if (currentArticleImageArray.length != 0)
@@ -94,7 +98,8 @@ function organiseArticleContents (articleJSON)
                 document.getElementById("articleSlides").style.display = "block";
 
                 //Set the current image to first image in  array
-                document.getElementById("articleImageID").src = currentArticleImageArray[0];
+                document.getElementById("articleImageID").src = currentArticleImageArray[0].model.url + "?" + new Date().getTime();
+                document.getElementById("articleImageID").alt = currentArticleImageArray[0].model.altText;
 
                 //Set text at the top corner of image to 1/X
                 document.getElementById("articleImageNumberID").innerHTML = 1 + " / " + currentArticleImageArray.length;
@@ -114,24 +119,24 @@ function organiseArticleContents (articleJSON)
 function changeArticleImage(slidePosChange)
 {   
     //As long as the new position is in range of the image array, change the image src.
-    if (slideIndex + slidePosChange > -1 && slideIndex + slidePosChange < currentArticleImageArray.length )
+    if (imageSlideIndex + slidePosChange > -1 && imageSlideIndex + slidePosChange < currentArticleImageArray.length )
     {
-        document.getElementById("articleImageID").src = currentArticleImageArray[slideIndex + slidePosChange] + "?" + new Date().getTime();
-        slideIndex += slidePosChange; 
-        document.getElementById("articleImageNumberID").innerHTML = (slideIndex + 1) + " / " + currentArticleImageArray.length;
+        document.getElementById("articleImageID").src = currentArticleImageArray[imageSlideIndex + slidePosChange].model.url + "?" + new Date().getTime();
+        document.getElementById("articleImageID").alt = currentArticleImageArray[imageSlideIndex + slidePosChange].model.altText;
+        imageSlideIndex += slidePosChange; 
+        document.getElementById("articleImageNumberID").innerHTML = (imageSlideIndex + 1) + " / " + currentArticleImageArray.length;
     }
-          
 }
 
 //Function to go to the next article
 function getNextArticle ()
 {
     //Only move if new article position is in 1-5
-    if(currentArticlePos + 1 < 6)
+    if(currentArticleIndex + 1 < 6)
     {
         clearArticleHTML();
 
-        getArticleJSON(currentArticlePos+1).then(function()
+        getArticleJSON(currentArticleIndex+1).then(function()
             {
                 setArticleHTML();
             }, 
@@ -140,7 +145,7 @@ function getNextArticle ()
                 console.log(error);
             });
 
-        currentArticlePos +=1;
+        currentArticleIndex +=1;
     }
 }
 
@@ -148,44 +153,39 @@ function getNextArticle ()
 function getPrevArticle()
 {
     //Only move if new article position is in 1-5
-    if(currentArticlePos-1 > 0)
+    if(currentArticleIndex-1 > 0)
     {
         clearArticleHTML();
 
-        getArticleJSON(currentArticlePos-1).then(function()
+        getArticleJSON(currentArticleIndex-1).then(function()
         {
             setArticleHTML();
         }, 
         function(error)
         {
             console.log(error);
-
         });
 
-        currentArticlePos -=1;
+        currentArticleIndex -=1;
     }
-
-
 
 }
 
-//Function to reset and clear all variables which change per article
+//Function to reset all variables and clear page HTML.
 function clearArticleHTML()
 {
     currentArticleImageArray = [];
-    currentArticleSections = [];
-    slideIndex = 0;
-    document.getElementById("articleParagraphs").innerHTML = "";
-
-
+    currentArticleSectionsArray = [];
+    imageSlideIndex = 0;
+    document.getElementById("articleContent").innerHTML = "";
 }
 
 //Function to get a single article in .JSON format which is returned in a promise
 function getArticleJSON (articleNum)
 {
+    //Returns a promise to provide the articleJSON
     return new Promise(function(succeeded, failed)
     {
-
         let httpRequest = new XMLHttpRequest();
         httpRequest.responseType = "json";
 
@@ -214,6 +214,7 @@ function getArticleJSON (articleNum)
             }
         }
 
+        //Event listener for any error that occurs with the httpRequest
         httpRequest.onerror = () =>
         {
             console.log("An error occurred with the get request")
@@ -225,11 +226,13 @@ function getArticleJSON (articleNum)
 
 }
 
+//This function retrieves the ratings given to the articles by the user
 function getArticleRatings ()
 {
     let ratingsArray = [];
     let articleID = "article";
 
+    //Loops through and gets each element by id and adds rating to array.
     for (let i = 1; i < 6; i++)
     {
         let rating = document.getElementById(articleID + i).value;
@@ -249,9 +252,10 @@ function getArticleRatings ()
 }
 
 
-
+//Function to make a http POST request to post the article ratings  
 function postArticleRatings (ratingsArray)
 {
+    //Returns a promise to POST the articles ratings
     return new Promise(function(succeeded, failed)
     {
         /*
@@ -277,8 +281,6 @@ function postArticleRatings (ratingsArray)
             failed(e);
         }
 
-        
-
     }); 
 
 
@@ -288,17 +290,41 @@ function postArticleRatings (ratingsArray)
 /*
 
 How I would go about preloading surrounding articles:
-1. When moving from one article to another I would 
+1.  When moving from one article to another I would make a http request to GET the surrounding articles
+    eg if the user is on article 2 I would get article 1 & 3. 
+
+2.  I would then add these JSON files to an array and when the user requested either of the pages I would use 
+    one of the two articles to set the page HTML.
+
+3. This way a user can only navigate to an article that has already been preloaded.
 
 
+let preloadedArticles = [];
+function preloadArticles (articlePosition)
+{
+    if (articlePosition === 1)
+    {
+       preloadedArticles.push(getArticleJSON(2)).
+    }
+    else if (articlePosition === 5)
+    {
+        preloadedArticles.push(getArticleJSON(4))
+    }
+    else
+    {
+        preloadedArticles.push(getArticleJSON(articlePosition + 1))
+        preloadedArticles.push(getArticleJSON(articlePosition -1))
+    }
+}
 
 
+When changing articles I would then just retrieve the respective element from the preLoadedArticles array
 
+To make this work I would need to carry out a lot of refactoring with regards to how the JSON file is handled once
+the get request has been made for this preloading to work. 
 
-
-
-
-
+Doing all of this means a user is never loading an article directly from the git repository, there is a buffer of 
+articles.
 
 */
 

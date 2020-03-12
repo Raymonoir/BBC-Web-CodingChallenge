@@ -1,17 +1,23 @@
 <!DOCTYPE html>
 <html>
     <head>
-        
+        <title> Ray's News Reader</title>
+
+        <meta charset="UTF-8">
+        <meta name="author" content="Raymond Ward">
+        <meta name="description" content="Ray's News Reader, accesses provided articles and displays them">
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="main.js"></script>
-        <script src="https://code.jquery.com/qunit/qunit-2.9.2.js"></script>
+        <!-- <script src="https://code.jquery.com/qunit/qunit-2.9.2.js"></script> -->
         <script src="testing.js"></script>
+
+
         <link href="https://fonts.googleapis.com/css?family=Abel|Crimson+Text&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="style.css">
 
         <script>
-
-           
+           //Loads the first article when the page is opened.
             getArticleJSON(1).then(function()
                 {
                     setArticleHTML();
@@ -20,30 +26,20 @@
                 {
                     console.log(error);
                 });
-         
-
-        </script>
-
-
-   
+        </script>   
     </head>
 
     <body>
-
-
-        <div name="Top Header"; class="pageHeader"> 
+        
+        <div class="pageHeader"> 
             <h1>Ray's News Reader</h1>
         </div>
 
-
-        <a class ="selectImageButton prevImage"; onclick="getPrevArticle()";> Previous Article </a>
-        <a class ="selectImageButton nextImage"; onclick="getNextArticle()"; id="nextArticleLink"> Next Article </a>
-
-        <div name="Article Container"; class = "articleContainer"; >
+        <div name="Article container"; class = "articleContainer"; >
             
-            <div name = "Slideshow container"; class = "articleSlidesContainer"; id="articleSlides"; style="margin-left: 10px;">
+            <div name = "Image slideshow container"; class = "articleSlidesContainer"; id="articleSlides"; style="margin-left: 10px;">
 
-                <div name = "Image container">
+                <div name = "Singular image container">
                     <div name = "Current image number"; class='imageNumberText'; id= "articleImageNumberID"></div>
                     <img name = "Current image"; class="articleImage"; id="articleImageID">
                     <a name = "Prev image"; class ="selectImageButton prevImage"; onclick="changeArticleImage(-1)"> < </a>
@@ -52,20 +48,14 @@
 
             </div>
 
-
             <div name = "Article Text"; class="articleTextContainer"; id="articleText"> 
+                <p id="articleContent">
 
-                <div name = "Article Title"; style="text-align: center;"></div>
-
-                <p id="articleParagraphs"></p>
+                </p>
             </div>
 
+            <a class ="selectImageButton prevImage"; onclick="getPrevArticle()";> Previous Article </a>
+            <a class ="selectImageButton nextImage"; onclick="getNextArticle()"; id="nextArticleLink"> Next Article </a>
         </div>
-
-        <script>
-            
-
-        </script>
-
     </body>
 </html>
