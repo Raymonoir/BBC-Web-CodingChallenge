@@ -77,7 +77,7 @@ function setArticleHTML()
 
 }
 
-
+//Function to set the href of an anchor to move to the ratings page
 function goToRatingsPage()
 {
     document.getElementById("nextArticleLink").href = "rating.html";
@@ -200,17 +200,16 @@ function getArticleJSON (articleNum)
         //Called when the XMLHttpRequest has finished loading
         httpRequest.onloadend = () =>
         {
-
-            if (httpRequest.status === 404)
-            {
-                console.log("Article Not Found");
-            }
-
             //Operation is done && status == done (200)
             if (httpRequest.status === 200 && httpRequest.readyState === httpRequest.DONE)
             {
                 let articleJSON = httpRequest.response;
                 succeeded(articleJSON);
+            }
+            //If status == 404 article is not found.
+            else if (httpRequest.status === 404)
+            {
+                console.log("Article Not Found");
             }
             else
             {
@@ -251,7 +250,7 @@ function getArticleRatings ()
         ratingsArray.push(rating);
     }
 
-
+    //Created promise to POST ratings and then alerts user that ratings have been posted
     postArticleRatings(ratingsArray).then(function ()
     {
         alert("Ratings posted");
