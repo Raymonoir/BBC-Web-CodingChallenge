@@ -8,6 +8,7 @@ This javascript file adds functionality to my Ray's News Reader html page.
 
 let currentArticleImageArray = [];
 let currentArticleSectionsArray = [];
+let preloadedArticles = [];
 let imageSlideIndex = 0;
 let currentArticleIndex = 1;
 
@@ -55,9 +56,12 @@ function setArticleHTML()
         //If the current article is the last article, show the button which leads to rating articles
         if (currentArticleIndex >= 5)
         {
-            document.getElementById("nextArticleLink").href = "rating.html";
             document.getElementById("nextArticleLink").innerHTML = "Rate the articles";
-            document.getElementById("nextArticleLink").onclick = "";
+            document.getElementById("nextArticleLink").onclick = () =>
+            {
+                goToRatingsPage();
+            };
+
         }
         //If not last article, show next article button
         else
@@ -71,6 +75,12 @@ function setArticleHTML()
         }
     }
 
+}
+
+
+function goToRatingsPage()
+{
+    document.getElementById("nextArticleLink").href = "rating.html";
 }
 
 //Function to sort through contents of article and display them in their alloted sections
@@ -134,19 +144,20 @@ function getNextArticle ()
     //Only move if new article position is in 1-5
     if(currentArticleIndex + 1 < 6)
     {
-        clearArticleHTML();
-
-        getArticleJSON(currentArticleIndex+1).then(function()
-            {
-                setArticleHTML();
-            }, 
-            function(error)
-            {
-                console.log(error);
-            });
+        resetArticle();
 
         currentArticleIndex +=1;
+
+        prepareArticleJSON(preloadedArticles[0]);
+
+        preloadedArticles = [];
+
+        preloadArticles();
+
+        console.log("forward V");
+        console.log(preloadedArticles);
     }
+
 }
 
 //Function to go to previous article
@@ -155,24 +166,24 @@ function getPrevArticle()
     //Only move if new article position is in 1-5
     if(currentArticleIndex-1 > 0)
     {
-        clearArticleHTML();
-
-        getArticleJSON(currentArticleIndex-1).then(function()
-        {
-            setArticleHTML();
-        }, 
-        function(error)
-        {
-            console.log(error);
-        });
+        resetArticle();
 
         currentArticleIndex -=1;
+
+        prepareArticleJSON(preloadedArticles[1]);
+
+        preloadedArticles = [];
+
+        preloadArticles();
+
+        console.log("backward V");
+        console.log(preloadedArticles);
     }
 
 }
 
 //Function to reset all variables and clear page HTML.
-function clearArticleHTML()
+function resetArticle()
 {
     currentArticleImageArray = [];
     currentArticleSectionsArray = [];
@@ -205,8 +216,7 @@ function getArticleJSON (articleNum)
             if (httpRequest.status === 200 && httpRequest.readyState === httpRequest.DONE)
             {
                 let articleJSON = httpRequest.response;
-                organiseArticleContents(articleJSON);
-                succeeded();
+                succeeded(articleJSON);
             }
             else
             {
@@ -225,6 +235,14 @@ function getArticleJSON (articleNum)
     });  
 
 }
+
+
+function prepareArticleJSON(articleJSON)
+{
+    organiseArticleContents(articleJSON);
+    setArticleHTML();
+}
+
 
 //This function retrieves the ratings given to the articles by the user
 function getArticleRatings ()
@@ -298,35 +316,57 @@ How I would go about preloading surrounding articles:
 
 3. This way a user can only navigate to an article that has already been preloaded.
 
+*/
 
-let preloadedArticles = [];
-function preloadArticles (articlePosition)
+
+function preloadArticles ()
 {
-    if (articlePosition === 1)
+    if (currentArticleIndex === 1)
     {
-       preloadedArticles.push(getArticleJSON(2)).
+       getArticleJSON(2).then(function (articleJSON)
+       {
+            preloadedArticles[0] = articleJSON;
+       },
+       function ()
+       {
+
+       });
     }
-    else if (articlePosition === 5)
+    else if (currentArticleIndex === 5)
     {
-        preloadedArticles.push(getArticleJSON(4))
+       getArticleJSON(4).then(function (articleJSON)
+       {
+            preloadedArticles[1] = articleJSON;
+       },
+       function ()
+       {
+           
+       });
     }
-    else
+    else 
     {
-        preloadedArticles.push(getArticleJSON(articlePosition + 1))
-        preloadedArticles.push(getArticleJSON(articlePosition -1))
+        getArticleJSON(currentArticleIndex + 1).then(function (articleJSON)
+       {
+            preloadedArticles[0] = articleJSON;
+       },
+       function ()
+       {
+           
+       })
+       .then(getArticleJSON(currentArticleIndex - 1).then(function (articleJSON)
+       {
+            preloadedArticles[1] = articleJSON;
+       },
+       function ()
+       {
+           
+       }));
+        
     }
 }
 
 
-When changing articles I would then just retrieve the respective element from the preLoadedArticles array
 
-To make this work I would need to carry out a lot of refactoring with regards to how the JSON file is handled once
-the get request has been made for this preloading to work. 
-
-Doing all of this means a user is never loading an article directly from the git repository, there is a buffer of 
-articles.
-
-*/
 
 
 

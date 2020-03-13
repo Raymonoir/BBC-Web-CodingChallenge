@@ -18,9 +18,10 @@
 
         <script>
            //Loads the first article when the page is opened.
-            getArticleJSON(1).then(function()
+            getArticleJSON(currentArticleIndex).then(function(articleJSON)
                 {
-                    setArticleHTML();
+                    prepareArticleJSON(articleJSON);
+                    preloadArticles();
                 }, 
                 function(error)
                 {
