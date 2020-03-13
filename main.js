@@ -153,9 +153,6 @@ function getNextArticle ()
         preloadedArticles = [];
 
         preloadArticles();
-
-        console.log("forward V");
-        console.log(preloadedArticles);
     }
 
 }
@@ -175,9 +172,6 @@ function getPrevArticle()
         preloadedArticles = [];
 
         preloadArticles();
-
-        console.log("backward V");
-        console.log(preloadedArticles);
     }
 
 }
@@ -236,7 +230,7 @@ function getArticleJSON (articleNum)
 
 }
 
-
+//Function to take required steps to display the JSON file onto article page
 function prepareArticleJSON(articleJSON)
 {
     organiseArticleContents(articleJSON);
@@ -304,32 +298,19 @@ function postArticleRatings (ratingsArray)
 
 }
 
-
-/*
-
-How I would go about preloading surrounding articles:
-1.  When moving from one article to another I would make a http request to GET the surrounding articles
-    eg if the user is on article 2 I would get article 1 & 3. 
-
-2.  I would then add these JSON files to an array and when the user requested either of the pages I would use 
-    one of the two articles to set the page HTML.
-
-3. This way a user can only navigate to an article that has already been preloaded.
-
-*/
-
-
+// A function to preload the articles surrounding the current article.
 function preloadArticles ()
 {
+    //If user is viewing article 1 or 5, only load 2nd or 4th article respectively
     if (currentArticleIndex === 1)
     {
        getArticleJSON(2).then(function (articleJSON)
        {
             preloadedArticles[0] = articleJSON;
        },
-       function ()
+       function (error)
        {
-
+            console.log(error);
        });
     }
     else if (currentArticleIndex === 5)
@@ -338,28 +319,29 @@ function preloadArticles ()
        {
             preloadedArticles[1] = articleJSON;
        },
-       function ()
+       function (error)
        {
-           
+            console.log(error);
        });
     }
     else 
     {
+        //Chain promises to load 2 surrounding artciles
         getArticleJSON(currentArticleIndex + 1).then(function (articleJSON)
        {
             preloadedArticles[0] = articleJSON;
        },
-       function ()
+       function (error)
        {
-           
+            console.log(error);
        })
        .then(getArticleJSON(currentArticleIndex - 1).then(function (articleJSON)
        {
             preloadedArticles[1] = articleJSON;
        },
-       function ()
+       function (error)
        {
-           
+            console.log(error);
        }));
         
     }
